@@ -1,0 +1,26 @@
+{% assign dialog_id = 'custom-product-dialog-' | append: product.id | append: '-' | append: section.id %}
+<button
+  type="button"
+  class="custom-product-card__plus"
+  data-product-dialog-open="{{ dialog_id }}"
+  aria-label="View {{ product.title | escape }}"
+>
+  <span aria-hidden="true">+</span>
+</button>
+
+<dialog class="custom-product-dialog" id="{{ dialog_id }}" data-product-dialog>
+  <div class="custom-product-dialog__panel">
+    <button type="button" class="custom-product-dialog__close" data-product-dialog-close aria-label="Close">&times;</button>
+    {% if product.featured_image %}
+      {{ product.featured_image
+        | image_url: width: 900
+        | image_tag: loading: 'lazy', widths: '400, 700, 900', sizes: '(max-width: 700px) 90vw, 40vw', class: 'custom-product-dialog__image', alt: product.featured_image.alt | default: product.title
+      }}
+    {% endif %}
+    <div class="custom-product-dialog__details">
+      <h3>{{ product.title }}</h3>
+      <p>{{ product.price | money }}</p>
+      <a href="{{ product.url }}">View product</a>
+    </div>
+  </div>
+</dialog>

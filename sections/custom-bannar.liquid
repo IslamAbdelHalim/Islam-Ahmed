@@ -1,0 +1,290 @@
+<style>
+  .custom-banner-section {
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+    color: #000;
+    font-family: inherit;
+  }
+
+  .banner-top-bar {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    left: 0;
+    background-color: #F5F5F5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    padding: 10px 50px;
+    border-top: 3px solid #202427;
+    border-bottom: 1px solid #ddd;
+    gap: 24px;
+  }
+
+  .banner-logo {
+    {% comment %} flex: 1 1 33%; {% endcomment %}
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+  }
+
+  .banner-subtext {
+    flex: 1 1 34%;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .banner-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    {% comment %} flex: 1 1 33%; {% endcomment %}
+    max-width: 185px;
+    min-height: 32px;
+    gap: 18px;
+    margin-left: auto;
+    background-color: #fff200;
+    color: #000;
+    padding: 6px 18px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  .banner-btn:hover {
+    background-color: #000;
+    color: #fff200;
+  }
+
+  .banner-hero {
+    position: relative;
+    width: 100%;
+    {% comment %} background: #f7f7f7; {% endcomment %}
+  }
+
+  .banner-top-image {
+    display: block;
+    width: 100%;
+    height: 700px;
+    {% comment %} height: clamp(220px, 42vw, 560px); {% endcomment %}
+    object-fit: cover;
+    object-position: bottom center;
+  }
+
+  .banner-lower {
+    display: flex;
+    align-items: stretch;
+    min-height: 470px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .banner-hero-content {
+    display: flex;
+    flex: 1 1 50%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+    padding: 64px 4vw;
+    background: #fff;
+  }
+
+  .banner-lower-image {
+    display: block;
+    object-fit: cover;
+    object-position: left center;
+  }
+
+  .hero-placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 250px;
+    color: #555;
+    font-size: 0.9rem;
+  }
+
+  .banner-heading {
+    max-width: 490px;
+    margin: 0 0 38px;
+    font-size: 70px;
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: 0px;
+    font-style: medium;
+  }
+
+  .banner-description {
+    max-width: 438px;
+    font-weight: 400;
+    margin: 0 0 44px;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  .banner-shop-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+    min-width: 196px;
+    padding: 15px 24px;
+    background: #000;
+    color: #fff;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  .banner-shop-link:hover {
+    background: #fff200;
+    color: #000;
+  }
+
+  .banner-bottom-bar {
+    text-align: center;
+    padding: 8px 20px;
+    border-top: 1px solid #e5e5e5;
+    background-color: #F5F5F5;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .banner-bottom-bar p {
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .banner-top-bar {
+      padding: 0 16px;
+      gap: 10px;
+    }
+
+    .banner-logo {
+      font-size: 1rem;
+    }
+
+    .banner-subtext {
+      display: none;
+    }
+
+    .banner-btn {
+      max-width: 140px;
+      font-size: 0.7rem;
+    }
+
+    .banner-top-image {
+      height: 260px;
+    }
+
+    .banner-lower {
+      flex-direction: column;
+    }
+
+    .banner-hero-content {
+      flex-basis: auto;
+      min-height: 420px;
+      padding: 48px 24px;
+    }
+
+    .banner-lower-image {
+      width: 100%;
+      min-height: 320px;
+      order: 2;
+    }
+
+    .banner-heading {
+      margin-bottom: 24px;
+      font-size: clamp(2.7rem, 13vw, 4rem);
+    }
+
+    .banner-description {
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+    }
+  }
+</style>
+
+
+<div class="custom-banner-section">
+  <div class="banner-hero">
+    <div class="banner-top-bar">
+      <div class="banner-logo">
+        {{ section.settings.logo_text | default: 'TISSO VISON' }}
+      </div>
+      
+      <div class="banner-subtext">
+        {{ section.settings.middle_text | default: 'Find the ideal gift for your loved ones.' }}
+      </div>
+
+      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="banner-btn">
+        {{ section.settings.button_text | default: 'CHOOSE GIFT' }} &rarr;
+      </a>
+    </div>
+
+      <img
+        src="{{ 'Frame.svg' | asset_url }}"
+        alt=""
+        width="1052"
+        height="400"
+        loading="eager"
+        class="banner-top-image"
+      >
+
+
+    <div class="banner-lower">
+      <div class="banner-hero-content">
+        <h1 class="banner-heading">{{ section.settings.heading | default: 'The Gift Guide' }}</h1>
+        <div class="banner-description">{{ section.settings.description | default: 'Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.' }}</div>
+        <a href="{{ section.settings.shop_link | default: routes.all_products_collection_url }}" class="banner-shop-link">
+          {{ section.settings.shop_text | default: 'SHOP NOW' }} <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+
+        <img
+          src="{{ 'Frame.svg' | asset_url }}"
+          alt=""
+          width="1052"
+          height="400"
+          loading="lazy"
+          class="banner-lower-image"
+        >
+
+    </div>
+  </div>
+
+  <div class="banner-bottom-bar">
+    <p>{{ section.settings.bottom_text | default: 'SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL' }}</p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom gift banner",
+  "settings": [
+    { "type": "text", "id": "logo_text", "label": "Logo text", "default": "TISSO VISON" },
+    { "type": "text", "id": "middle_text", "label": "Top bar message", "default": "Find the ideal gift for your loved ones." },
+    { "type": "text", "id": "button_text", "label": "Top button text", "default": "CHOOSE GIFT" },
+    { "type": "url", "id": "button_link", "label": "Top button link" },
+    { "type": "image_picker", "id": "top_image", "label": "Top full-width image" },
+    { "type": "image_picker", "id": "lower_image", "label": "Lower right image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero illustration" },
+    { "type": "text", "id": "heading", "label": "Hero heading", "default": "The Gift Guide" },
+    { "type": "richtext", "id": "description", "label": "Hero description", "default": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>" },
+    { "type": "text", "id": "shop_text", "label": "Hero button text", "default": "SHOP NOW" },
+    { "type": "url", "id": "shop_link", "label": "Hero button link" },
+    { "type": "text", "id": "bottom_text", "label": "Bottom bar text", "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL" }
+  ],
+  "presets": [
+    { "name": "Custom gift banner" }
+  ]
+}
+{% endschema %}
