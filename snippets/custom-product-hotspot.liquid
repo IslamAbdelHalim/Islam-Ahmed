@@ -11,16 +11,66 @@
 <dialog class="custom-product-dialog" id="{{ dialog_id }}" data-product-dialog>
   <div class="custom-product-dialog__panel">
     <button type="button" class="custom-product-dialog__close" data-product-dialog-close aria-label="Close">&times;</button>
-    {% if product.featured_image %}
-      {{ product.featured_image
-        | image_url: width: 900
-        | image_tag: loading: 'lazy', widths: '400, 700, 900', sizes: '(max-width: 700px) 90vw, 40vw', class: 'custom-product-dialog__image', alt: product.featured_image.alt | default: product.title
-      }}
-    {% endif %}
+    <div class="custom-product-dialog__media">
+      {% if product.featured_image %}
+        {{ product.featured_image
+          | image_url: width: 700
+          | image_tag: loading: 'lazy', widths: '400, 600, 700', sizes: '(max-width: 700px) 38vw, 180px', class: 'custom-product-dialog__image', alt: product.featured_image.alt | default: product.title
+        }}
+      {% endif %}
+    </div>
+
+    {% assign selected_variant = product.selected_or_first_available_variant %}
     <div class="custom-product-dialog__details">
       <h3>{{ product.title }}</h3>
-      <p>{{ product.price | money }}</p>
-      <a href="{{ product.url }}">View product</a>
+      <p class="custom-product-dialog__price">{{ selected_variant.price | money }}</p>
+      {% if product.description != blank %}
+        <div class="custom-product-dialog__description">{{ product.description | strip_html | truncatewords: 26 }}</div>
+      {% endif %}
     </div>
+
+    {% form 'product', product, class: 'custom-product-dialog__form' %}
+      <input type="hidden" name="id" value="{{ selected_variant.id }}">
+      {% for option in product.options_with_values %}
+        {% assign option_name = option.name | downcase %}
+        {% if option_name contains 'color' or option_name contains 'colour' %}
+          <fieldset class="custom-product-dialog__option">
+            <legend>{{ option.name }}</legend>
+            <div class="custom-product-dialog__choices">
+              {% for value in option.values %}
+                <label class="custom-product-dialog__choice">
+                  <input type="radio" name="options[{{ option.name }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                  <span>{{ value }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% endif %}
+      {% endfor %}
+
+      {% for option in product.options_with_values %}
+        {% assign option_name = option.name | downcase %}
+        {% unless option_name contains 'color' or option_name contains 'colour' %}
+          <fieldset class="custom-product-dialog__option">
+            <legend>{{ option.name }}</legend>
+            <div class="custom-product-dialog__select-wrap">
+              <select name="options[{{ option.name }}]" class="custom-product-dialog__select">
+                {% if option_name contains 'size' %}
+                  <option value="" disabled selected>Choose your size</option>
+                {% endif %}
+                {% for value in option.values %}
+                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+              </select>
+              <span class="custom-product-dialog__select-arrow" aria-hidden="true">&#8964;</span>
+            </div>
+          </fieldset>
+        {% endunless %}
+      {% endfor %}
+      <button type="submit" class="custom-product-dialog__submit" {% unless selected_variant.available %}disabled{% endunless %}>
+        {% if selected_variant.available %}ADD TO CART{% else %}SOLD OUT{% endif %}
+        <span aria-hidden="true">&rarr;</span>
+      </button>
+    {% endform %}
   </div>
 </dialog>
